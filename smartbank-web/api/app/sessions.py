@@ -24,6 +24,8 @@ class WebSession:
     pw_hash: bytes = b""
     is_admin: bool | None = None
     previous: dict = field(default_factory=dict)
+    # per-plugin global state that lives as long as the Delphi DLL stays loaded in the client (e.g. pep_chek)
+    module_state: dict = field(default_factory=dict)
     last_seen: float = field(default_factory=time.time)
 
     def idle_left(self) -> int:

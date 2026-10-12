@@ -12,6 +12,8 @@ import re
 import threading
 
 from .base import DBError
+from . import mock_cs
+from .mock_cs import CsMixin
 from ..config import settings
 
 _lock = threading.Lock()
@@ -34,13 +36,14 @@ def reset():
     """Test helper: reload fixtures (drops changed passwords)."""
     global _state
     _state = None
+    mock_cs.reset()
 
 
 def _unwrap(p: str) -> str:
     return p[3:-3] if p.startswith("KLs") and p.endswith("#1$") else p
 
 
-class MockConnection:
+class MockConnection(CsMixin):
     def __init__(self, username: str):
         self.username = username.upper()
         self.st = _load()
@@ -48,10 +51,14 @@ class MockConnection:
         self.session_id = next(_sid)
         self.context: dict = {}
         self.ini_open = False
+        self.cs = mock_cs.load(settings.mock_fixtures)
 
     # --- packages ---------------------------------------------------------
     def call_func(self, pkg, name, args, rettype=str, named=None):
         key = f"{pkg}.{name}".upper()
+        r = self._cs_func(key, args, named)
+        if r is not NotImplemented:
+            return r
         if key.startswith(("SBOP.ADD_ACCOUNT", "SB_ACA.GETUSERFILIALID")):
             return self._acc_func(key, named or {})
         if key == "SBLOGIN.GETSESSIONID":
@@ -96,6 +103,9 @@ class MockConnection:
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
         key = f"{pkg}.{name}".upper()
+        r = self._cs_proc(key, args, named)
+        if r is not NotImplemented:
+            return r
         if key in ("SBOP.UPD_ACCOUNT", "SBOP.CLOSE_ACCOUNT"):
             return self._acc_proc(key, named or {})
         if key == "SBLOGIN.CHANGEUSERPSW":
@@ -108,6 +118,9 @@ class MockConnection:
     def query(self, sql, binds=None):
         s = " ".join(sql.lower().split())
         b = binds or {}
+        r = self._cs_query(s, b)
+        if r is not None:
+            return r
         r = self._acc_query(s, b)
         if r is not None:
             return r
@@ -135,6 +148,8 @@ class MockConnection:
         raise DBError("ORA-00942: mock: query not emulated")
 
     def execute(self, sql, binds=None):
+        if self._cs_execute(sql, binds or {}):
+            return
         m = re.fullmatch(r'ALTER USER "([A-Z][A-Z0-9_$#]*)" ACCOUNT UNLOCK', sql.strip())
         if m:
             if not self.user.get("is_adm"):
@@ -145,6 +160,12 @@ class MockConnection:
             self.context["user_company"] = (binds or {}).get("COMP_id")
             return
         raise DBError("ORA-06550: mock: block not emulated")
+
+    def plsql(self, sql, binds=None, ret=None):
+        r = self._cs_plsql(sql, binds or {})
+        if r is NotImplemented:
+            raise DBError("ORA-06550: mock: block not emulated")
+        return r
 
     def cursor_block(self, sql, cursor_bind, binds=None):
         raise DBError("ORA-06550: mock: cursor block not emulated")

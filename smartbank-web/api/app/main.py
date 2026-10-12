@@ -273,6 +273,8 @@ def login_history_csv(user: str = "", date_from: str = "", date_to: str = "", ws
 # ------------------------------------------------------------------ migrated modules
 from . import accounts  # noqa: E402
 app.include_router(accounts.make_router(current, require_module, err))
+from . import customers  # noqa: E402
+app.include_router(customers.make_router(current, require_module, err))
 
 
 @app.on_event("startup")

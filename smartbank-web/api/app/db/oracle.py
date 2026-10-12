@@ -6,7 +6,7 @@ import threading
 
 import oracledb
 
-from .base import DBError
+from .base import DBError, Out
 
 _IDENT = re.compile(r"^[A-Za-z][A-Za-z0-9_$#]{0,127}$")
 
@@ -67,13 +67,39 @@ class OracleConnection:
             return r.getvalue() == 1
 
     def call_proc(self, pkg, name, args, named=None, commit=True):
+        """Returns {param: value} for Out() parameters (empty dict otherwise)."""
         with self.lock, self._c.cursor() as cur:
+            kw, outs = {}, {}
+            for k, v in (named or {}).items():
+                if isinstance(v, Out):
+                    outs[k] = kw[k] = cur.var(_TYPES[v.typ])
+                else:
+                    kw[k] = v
             try:
-                cur.callproc(_ident(pkg, name), list(args), keyword_parameters=named or None)
+                cur.callproc(_ident(pkg, name), list(args), keyword_parameters=kw or None)
                 if commit:
                     self._c.commit()
             except oracledb.Error as e:
                 raise _wrap(e)
+            return {k: v.getvalue() for k, v in outs.items()}
+
+    def plsql(self, sql, binds=None, ret=None):
+        """Anonymous block. Used where a call needs a PL/SQL BOOLEAN argument (e.g. CommitTemp => true), which
+        DOA passes natively; the literal is written into the block text, values stay bind variables.
+        If ret is given the block must assign :r."""
+        with self.lock, self._c.cursor() as cur:
+            b = dict(binds or {})
+            r = None
+            if ret is not None:
+                r = b["r"] = cur.var(_TYPES[ret])
+            try:
+                cur.execute(sql, b)
+            except oracledb.Error as e:
+                raise _wrap(e)
+            if r is None:
+                return None
+            v = r.getvalue()
+            return int(v) if ret is int and v is not None else v
 
     def query(self, sql, binds=None):
         with self.lock, self._c.cursor() as cur:

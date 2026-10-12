@@ -20,6 +20,13 @@ class DBError(Exception):
         self.code = code
 
 
+class Out:
+    """Marks an OUT parameter in a pmNamed call (DOA binds a variable; e.g. SBOP.close_customer RESULT)."""
+
+    def __init__(self, typ=int):
+        self.typ = typ
+
+
 class Connection(Protocol):
     username: str
 
@@ -29,6 +36,7 @@ class Connection(Protocol):
     def query(self, sql: str, binds: dict | None = None) -> list[dict]: ...
     def execute(self, sql: str, binds: dict | None = None) -> None: ...
     def cursor_block(self, sql: str, cursor_bind: str, binds: dict | None = None) -> list[dict]: ...
+    def plsql(self, sql: str, binds: dict | None = None, ret: type | None = None) -> Any: ...
     def ping(self) -> bool: ...
     def close(self) -> None: ...
 
