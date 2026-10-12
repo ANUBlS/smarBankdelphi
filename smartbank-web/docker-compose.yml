@@ -1,0 +1,22 @@
+services:
+  api:
+    build: ./api
+    env_file: .env
+    volumes:
+      - api-data:/data            # app-side SQLite: login/logout history, app lockouts, admin actions
+    expose: ["8000"]
+    restart: unless-stopped
+    # If the Oracle host is only resolvable/reachable from the Docker host, add e.g.:
+    # extra_hosts: ["oradb.bank.local:10.0.0.15"]
+  web:
+    build: ./web
+    environment:
+      API_URL: http://api:8000
+      DEFAULT_LANG: ${DEFAULT_LANG:-en}
+    volumes:
+      - ./web/locales:/app/locales:ro   # edit translations without rebuilding
+    ports: ["${WEB_PORT:-8080}:3000"]
+    depends_on: [api]
+    restart: unless-stopped
+volumes:
+  api-data:
