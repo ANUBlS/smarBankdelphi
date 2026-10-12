@@ -1,6 +1,4 @@
-import os, tempfile
-os.environ["DB_MODE"] = "mock"
-os.environ["AUDIT_DB_PATH"] = os.path.join(tempfile.mkdtemp(), "a.sqlite")
+import os
 import pytest
 from fastapi.testclient import TestClient
 from app import main, sessions

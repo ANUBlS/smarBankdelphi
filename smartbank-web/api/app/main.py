@@ -270,6 +270,11 @@ def login_history_csv(user: str = "", date_from: str = "", date_to: str = "", ws
                              headers={"Content-Disposition": "attachment; filename=login-history.csv"})
 
 
+# ------------------------------------------------------------------ migrated modules
+from . import accounts  # noqa: E402
+app.include_router(accounts.make_router(current, require_module, err))
+
+
 @app.on_event("startup")
 async def _reaper():
     async def loop():

@@ -83,5 +83,8 @@ The screenshots are in `docs/screenshots/`.
 2. Register a page in `web/public/modules/<name>.js` as `SB.pages['/m/<slug>'] = (el, ctx) => …`.
 3. Set `"migrated": true` for the module's CLSID in `web/modules.json`.
 
+## Migrated modules
+- **Accounts** (`Packages/Accounts`, CLSID `{53E4AB09-4BA7-11D6-B271-00C0262B568B}`): list with filters, ordering and paging, new/edit account, close account, account documents (debit/credit), balance history, CSV export. API in `api/app/accounts.py`, UI in `web/public/modules/accounts.js`. Parity checklist: `docs/PARITY_ACCOUNTS.md`.
+
 ## Known limits / to verify on the real DB
 See `docs/PILOT_NOTES.md`.
